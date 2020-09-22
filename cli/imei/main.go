@@ -25,6 +25,9 @@ func main() {
 	var inputFile string
 	flag.StringVar(&inputFile, "input", "-", "input `path` (use - for stdin)")
 
+	var autofix bool
+	flag.BoolVar(&autofix, "autofix", true, "autofix the hexadecimal checksum")
+
 	flag.Parse()
 
 	var outputFormat imei.IMEIFormat
@@ -73,6 +76,9 @@ func main() {
 				parsedIMEI, err = imei.HexadecimalIMEI.Parse(text)
 				if err != nil {
 					parsedIMEI, err = imei.HexadecimalChecksumIMEI.Parse(text)
+					if err != nil && autofix {
+						parsedIMEI, err = imei.HexadecimalIMEI.Parse(text[:len(text)-1])
+					}
 				}
 			}
 		case "dec":
@@ -81,6 +87,9 @@ func main() {
 			parsedIMEI, err = imei.HexadecimalIMEI.Parse(text)
 		case "hex-checksum":
 			parsedIMEI, err = imei.HexadecimalChecksumIMEI.Parse(text)
+			if err != nil && autofix {
+				parsedIMEI, err = imei.HexadecimalIMEI.Parse(text[:len(text)-1])
+			}
 		default:
 			fmt.Println("unknown input format")
 			fmt.Println()
