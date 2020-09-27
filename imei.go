@@ -91,3 +91,16 @@ func (format IMEIFormat) Parse(input string) (*IMEI, error) {
 
 	return &_imei, nil
 }
+
+func Parse(input string) (*IMEI, error) {
+	switch len(input) {
+	case 18:
+		return DecimalIMEI.Parse(input)
+	case 14:
+		return HexadecimalIMEI.Parse(input)
+	case 15:
+		return HexadecimalChecksumIMEI.Parse(input)
+	default:
+		return nil, fmt.Errorf("invalid length: %w", ErrInvalidIMEI)
+	}
+}

@@ -71,16 +71,7 @@ func main() {
 
 		switch inputFormatStr {
 		case "auto":
-			parsedIMEI, err = imei.DecimalIMEI.Parse(text)
-			if err != nil {
-				parsedIMEI, err = imei.HexadecimalIMEI.Parse(text)
-				if err != nil {
-					parsedIMEI, err = imei.HexadecimalChecksumIMEI.Parse(text)
-					if err != nil && autofix {
-						parsedIMEI, err = imei.HexadecimalIMEI.Parse(text[:len(text)-1])
-					}
-				}
-			}
+			parsedIMEI, err = imei.Parse(text)
 		case "dec":
 			parsedIMEI, err = imei.DecimalIMEI.Parse(text)
 		case "hex":
