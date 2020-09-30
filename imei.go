@@ -54,8 +54,10 @@ func (format IMEIFormat) Parse(input string) (*IMEI, error) {
 		return nil, fmt.Errorf("invalid length: %w", ErrInvalidIMEI)
 	}
 
-	if _, err = strconv.Atoi(input); err != nil {
-		return nil, fmt.Errorf("invalid characters: %w", ErrInvalidIMEI)
+	for _, ch := range input {
+		if _, err := strconv.Atoi(string(ch)); err != nil {
+			return nil, fmt.Errorf("invalid characters: %w", ErrInvalidIMEI)
+		}
 	}
 
 	imei := input
